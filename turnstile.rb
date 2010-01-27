@@ -1,9 +1,8 @@
 require 'pathname'
-require 'digest/sha2'
 
-$prefix = Pathname.new(File.dirname(__FILE__)).realpath
+PREFIX = Pathname.new(".").realpath.to_s
 
-require "#{$prefix}/vendor/gems/environment"
+require "#{PREFIX}/vendor/gems/environment"
 Bundler.require_env
 
 class Generate
@@ -19,6 +18,12 @@ class Generate
   
   def self.uuid
     @@uuid.generate
+  end
+end
+
+class Object
+  def blank?
+    self.nil? || (self.respond_to?(:empty?) && self.empty?)
   end
 end
 
@@ -314,6 +319,7 @@ module Turnstile
         @store["uuids"] = uuids
         
         user[:realms][realm][:uuid] = uuid
+        
         @store["user-#{user}"] = user
         
         uuid
@@ -329,7 +335,6 @@ module Turnstile
         
         raise "User doesn't exist." if user.blank?
         raise "User isn't part of realm." if user[:realms][realm].blank?
-        raise "Password is incorrect." unless user[:realms][realm][:hash] == Generate.hash(password, user[:realms][realm][:salt])
         raise "User isn't signed in." if uuid.blank?
         
         uuids = @store["uuids"]
