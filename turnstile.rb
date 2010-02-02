@@ -1,9 +1,8 @@
-require 'pathname'
+#require "#{File.dirname(__FILE__)}/vendor/gems/environment"
+#Bundler.require_env
 
-PREFIX = Pathname.new(".").realpath.to_s
-
-require "#{PREFIX}/vendor/gems/environment"
-Bundler.require_env
+require 'moneta'
+require 'uuid'
 
 class Generate
   @@uuid = UUID.new
