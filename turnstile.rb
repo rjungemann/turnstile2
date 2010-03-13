@@ -1,3 +1,4 @@
+require 'digest/sha2'
 require 'moneta'
 require 'uuid'
 
@@ -26,7 +27,7 @@ end
 module Turnstile
   module Model
     class Turnstile
-      attr_accessor :realms, :users, :roles
+      attr_accessor :realms, :users, :roles, :store
 
       def initialize store
         @store = store
@@ -81,7 +82,7 @@ module Turnstile
         r = @store["realm-#{realm}"]
 
         raise "Realm doesn't exist." if r.blank?
-        raise "Role doesn't exist." unless @store["roles"].include? role
+        raise "Role doesnt exist." unless @store["roles"].include? role
         raise "Realm already has role." if r[:roles].include? role
 
         r[:roles] << role
@@ -147,6 +148,15 @@ module Turnstile
 
         @store["user-#{name}"] = nil
         @store["users"] = @store["users"].reject { |u| u[:name] == name }
+      end
+      
+      def attribute name, key, value = nil
+        user = @store["user-#{name}"]
+        value ||= user[key]
+        
+        user[key] = value
+        
+        @store["user-#{name}"] = user
       end
 
       def realms name
@@ -272,7 +282,7 @@ module Turnstile
 
         raise "User doesn't exist." if user.blank?
         raise "Realm doesn't exist." unless @store["realms"].include? realm
-        raise "Role doesn't exist" unless @store["roles"].include? role
+        raise "Role already exists" if @store["roles"].include? role
         raise "User isn't part of realm." if user[:realms][realm].blank?
         raise "User already has role." if user[:realms][realm][:roles].include? role
         

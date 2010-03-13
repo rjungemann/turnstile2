@@ -1,0 +1,10 @@
+{
+	"host": "mail.your-domain.com",
+	"port": 25,
+	"connection_host": "localhost",
+	"username": "",
+	"password": "",
+	"from": "me@fromdomain.com",
+	"to": 'test@todomain.com',
+	"template": "config/template.erb"
+}
