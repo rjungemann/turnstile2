@@ -6,7 +6,7 @@ turnstile
 
 Turnstile is meant to be a flexible authentication and authorization system for Ruby. Currently it is merely a set of "model" classes, although I will shortly release a set of Rack middleware and an HTTP client library which will allow one to create providers, consumers, and clients which are available to Rails apps (or any Rack-compatible app for that matter), for a modest "single sign-on" solution.
 
-Turnstile is built on Moneta, which is a hot-swappable interface for various key-value stores. Moneta uses SDBM as its data-store by default, but it can also use Tokyo Cabinet, Redis, or even SQL-based sources, thanks to the DataMapper Moneta wrapper.
+Turnstile is built on Redis.
 
 == FEATURES/PROBLEMS:
 
@@ -52,20 +52,19 @@ You can also see if a user is signed into a realm, or sign them out.
 
 == REQUIREMENTS:
 
-* Moneta, uuid, and andand gems
+* redis-rb, json, and uuid gems
 
 == INSTALL:
 
     gem sources -a http://gems.github.com
     sudo gem install thefifthcircuit-turnstile
     
-To use, either type `turnstile` into your terminal, or create a new text file, type in
+To use, start irb, then type in
 
-    require 'rubygems'
     require 'turnstile'
+    require 'redis'
     
-    $t = Turnstile::Model::Turnstile.new # create and instantiate database
-    Turnstile::Model::Turnstile.init # setup database with default values
+    $t = Turnstile::Model::Turnstile.new(Redis.new) # create and instantiate database
     
     include Turnstile::Model
     

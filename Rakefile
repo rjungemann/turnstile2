@@ -2,13 +2,13 @@ require 'rake/gempackagetask'
 
 spec = Gem::Specification.new do |s| 
   s.name = "turnstile2"
-  s.version = "0.2.4"
+  s.version = "0.3.0"
   s.author = "Roger Jungemann"
   s.email = "roger@thefifthcircuit.com"
   s.homepage = "http://thefifthcircuit.com"
   s.platform = Gem::Platform::RUBY
-  s.summary = "A moneta-based authentication system, with realms, users, and roles."
-  s.description = s.summary
+  s.summary = "A Redis-based authentication system, with realms, users, and roles."
+  s.description = s.summary + " The first version to use Redis (instead of Moneta) is 0.3.0."
   s.files = FileList["{bin,lib,vendor}/**/*"].to_a
   s.require_path = "lib"
   #s.autorequire = "name"
@@ -21,4 +21,14 @@ end
  
 Rake::GemPackageTask.new(spec) do |pkg| 
   pkg.need_tar = true 
+end
+
+desc ""
+task :test do
+  sh "ruby test/main.rb"
+end
+
+desc ""
+task :console do
+  sh "irb -rturnstile"
 end
