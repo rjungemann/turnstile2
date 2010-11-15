@@ -333,7 +333,6 @@ module Turnstile
         raise "User isn't part of realm." if user["realms"][realm].blank?
         raise "Password is incorrect." unless user["realms"][realm]["hash"] == Generate.hash(password, user["realms"][realm]["salt"])
         
-        uuids = @store.smembers("uuids")
         uuid = Generate.uuid
         
         @store.hset("uuids", uuid, { :name => name, :realm => realm }.to_json)
