@@ -60,7 +60,7 @@ module Turnstile
 
       def destroy realm
         raise "Realm must be specified." if realm.blank?
-        raise "Realm doesn't exist." if @store["realm-#{realm}"].blank?
+        raise "Realm doesn't exist." if @store.get("realm-#{realm}").blank?
 
         @store.srem("realms", realm)
         @store.del("realm-#{realm}")
@@ -333,7 +333,7 @@ module Turnstile
         raise "User isn't part of realm." if user["realms"][realm].blank?
         raise "Password is incorrect." unless user["realms"][realm]["hash"] == Generate.hash(password, user["realms"][realm]["salt"])
         
-        uuids = @store["uuids"]
+        uuids = @store.smembers("uuids")
         uuid = Generate.uuid
         
         @store.hset("uuids", uuid, { :name => name, :realm => realm }.to_json)

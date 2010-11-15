@@ -4,13 +4,11 @@ require 'redis'
 require "#{File.dirname(__FILE__)}/../turnstile"
 
 describe Turnstile::Model::Turnstile do
-  before do
-    @t = Turnstile::Model::Turnstile.new(Redis.new)
-  end
-  
-  describe "signin" do
-    it "should allow a user to signin" do
-      skip
+  describe "realms" do
+    it "should allow a realm to be created" do
+      @t = Turnstile::Model::Turnstile.new(Redis.new)
+
+      flunk
     end
   end
 end
