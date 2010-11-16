@@ -7,7 +7,7 @@
 require 'sinatra/base'
 require 'moneta'
 require 'moneta/memory'
-require "#{File.dirname(__FILE__)}/turnstile_app"
+require "#{File.dirname(__FILE__)}/lib/turnstile_app"
 
 module Turnstile
   class App < Sinatra::Base

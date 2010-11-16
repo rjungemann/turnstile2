@@ -30,5 +30,5 @@ end
 
 desc ""
 task :console do
-  sh "irb -rturnstile"
+  sh "irb -rlib/turnstile"
 end
