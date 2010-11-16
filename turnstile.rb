@@ -384,9 +384,12 @@ module Turnstile
       def from_uuid uuid
         raise "uuid must not be blank." if uuid.blank?
         
-        name = @store.hget("uuids", uuid)
+        values = JSON.parse(@store.hget("uuids", uuid)) rescue nil
         
-        JSON.parse(@store.get("user-#{name}")) rescue nil
+        name = values["name"]
+        json = @store.get("user-#{name}")
+        
+        JSON.parse(json) rescue nil
       end
 
       alias :exists? :find
