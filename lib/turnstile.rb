@@ -386,6 +386,8 @@ module Turnstile
         
         values = JSON.parse(@store.hget("uuids", uuid)) rescue nil
         
+        return if values.blank?
+        
         name = values["name"]
         json = @store.get("user-#{name}")
         
