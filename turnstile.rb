@@ -265,7 +265,10 @@ module Turnstile
         user = JSON.parse(@store.get("user-#{name}")) rescue nil
 
         raise "User doesn't exist." if user.blank?
-        raise "Realm doesn't exist." unless @store.sismember("realms", realm)
+        raise "Realm doesn't exist." if @store.sismember("realms", realm).blank?
+        
+        puts user.inspect
+        
         raise "User isn't part of realm." if user["realms"][realm].blank?
 
         user["realms"][realm]["roles"]
@@ -294,7 +297,7 @@ module Turnstile
 
         raise "User doesn't exist." if user.blank?
         raise "Realm doesn't exist." unless @store.sismember("realms", realm)
-        raise "Role already exists" if @store.sismember("roles", role)
+        raise "Role doesn't exist." if @store.sismember("roles", role).blank?
         raise "User isn't part of realm." if user["realms"][realm].blank?
         raise "User already has role." if user["realms"][realm]["roles"].include? role
         
@@ -381,7 +384,9 @@ module Turnstile
       def from_uuid uuid
         raise "uuid must not be blank." if uuid.blank?
         
-        @store.hget("uuids", uuid)
+        name = @store.hget("uuids", uuid)
+        
+        JSON.parse(@store.get("user-#{name}")) rescue nil
       end
 
       alias :exists? :find
